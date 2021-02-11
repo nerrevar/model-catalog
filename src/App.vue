@@ -20,11 +20,24 @@
 import Header from '@/components/header'
 import Footer from '@/components/footer'
 
+import firebase from 'firebase/app'
+
 export default {
   name: 'App',
   components: {
     Header,
     Footer,
+  },
+  mounted () {
+    const firebaseConfig = {
+      apiKey: 'AIzaSyBoOuFaBPdtbqG_Stx6_Zq5nGDFdfHe75g',
+      authDomain: 'model-catalog-303814.firebaseapp.com',
+      projectId: 'model-catalog-303814',
+      storageBucket: 'model-catalog-303814.appspot.com',
+      messagingSenderId: '712573757834',
+      appId: '1:712573757834:web:d969e1bce947165c624073',
+    }
+    firebase.initializeApp(firebaseConfig)
   },
 }
 </script>

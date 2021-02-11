@@ -10,6 +10,11 @@ Vue.use(VueRouter)
 
 const routes = [
   {
+    path: '/upload',
+    name: 'Upload',
+    component: () => import('@/views/Upload.vue'),
+  },
+  {
     path: '/',
     name: 'Home',
     component: Home,

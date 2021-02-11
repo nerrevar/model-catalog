@@ -7,4 +7,8 @@ export default {
     en: 'About',
     ru: 'Информация',
   },
+  Upload: {
+    ru: 'Загрузить модель',
+    en: 'Upload model',
+  },
 }

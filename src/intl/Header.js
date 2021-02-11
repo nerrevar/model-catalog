@@ -1,4 +1,12 @@
 export default {
+  auth_google: {
+    ru: 'Войти с аккаунтом Google',
+    en: 'Sign in with Google',
+  },
+  logout: {
+    ru: 'Выйти',
+    en: 'Logout',
+  },
   greeting: {
     ru: 'Добро пожаловать в наш каталог 3d моделей!',
     en: 'Welcome to our catalog of 3d models!',

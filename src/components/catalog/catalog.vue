@@ -49,6 +49,21 @@ export default {
     CardPlaceholder,
     Card,
   },
+  created () {
+    this.$fetch(
+      'catalog',
+      {}
+    ).then(
+      response => response.json()
+    ).then(
+      response => {
+        if (response.status === 'success') {
+          this.loaded = true
+          this.modelList = response.modelList
+        }
+      }
+    )
+  },
 }
 </script>
 

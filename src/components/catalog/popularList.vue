@@ -51,8 +51,19 @@ export default {
   },
   computed: mapGetters(['getLanguage']),
   created () {
-    // fetch content
-    // this.$fetch()
+    this.$fetch(
+      'popular',
+      {}
+    ).then(
+      response => response.json()
+    ).then(
+      response => {
+        if (response.status === 'success') {
+          this.loaded = true
+          this.popularList = response.popularList
+        }
+      }
+    )
   },
   mounted () {
     this.interval = setInterval(

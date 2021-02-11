@@ -10,6 +10,11 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     Language: 'en',
+    Auth: {
+      user: null,
+      credential: null,
+      error: null,
+    },
   },
   getters: { ...getters },
   actions: { ...actions },
