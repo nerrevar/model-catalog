@@ -23,15 +23,30 @@
             {{ pageName[route.name][getLanguage] }}
           </router-link>
           <div
-            class="navbar-item"
+            class="navbar-item has-dropdown is-hoverable has-background-link"
             v-if="getUser === null"
           >
-            <button
-              class="button is-link"
-              @click="auth"
-            >
-              {{ dict['auth_google'][getLanguage] }}
-            </button>
+            <div class="navbar-link">
+              <span>
+                {{ dict['auth_google'][getLanguage] }}
+              </span>
+            </div>
+            <div class="navbar-dropdown">
+              <div
+                class="button is-info m-1"
+                @click="auth('google')"
+              >
+                <img class="ml-4 mr-2" src="https://google.com/favicon.ico" alt="" />
+                <span class="mr-4">Google</span>
+              </div>
+              <div
+                class="button is-info m-1"
+                @click="auth('github')"
+              >
+                <img class="ml-4 mr-2" src="https://github.com/favicon.ico" alt="" />
+                <span class="mr-4">GitHub</span>
+              </div>
+            </div>
           </div>
           <div
             class="navbar-item has-dropdown is-hoverable"
@@ -58,13 +73,13 @@
             </div>
             <div class="navbar-dropdown">
               <div
-                v-for="(lang, index) in getLangs.list"
+                v-for="(lang, index) in langs.list"
                 :key="index"
                 :class="[ 'navbar-item', 'is-hoverable', { 'is-active': getLanguage === lang }]"
                 @click="setLanguage(lang)"
                 @touchend="setLanguage(lang)"
               >
-                <img :src="getLangs.icons[lang]" alt="" />&nbsp;&nbsp;{{ lang }}
+                <img :src="langs.icons[lang]" alt="" />&nbsp;&nbsp;{{ lang }}
               </div>
             </div>
           </div>
@@ -94,6 +109,7 @@ export default {
     return {
       dict: dict,
       pageName: pageName,
+      langs: langs,
     }
   },
   components: {
@@ -104,32 +120,48 @@ export default {
     getRouteList () {
       return this.$router.options.routes.filter(r => r.path !== '*')
     },
-    getLangs () {
-      return langs
-    },
   },
   methods: {
     ...mapActions(['setLanguage', 'setUserCredential', 'setUser', 'setAuthError']),
-    auth () {
-      let provider = new firebase.auth.GoogleAuthProvider()
-      provider.addScope('profile')
-      provider.addScope('email')
-      firebase.auth().signInWithPopup(provider).then(
-        result => {
-          console.log(result)
-          this.setUserCredential(result.credential)
-          this.setUser(result.user.providerData.pop())
-          this.setAuthError(null)
+    auth (providerName) {
+      firebase.auth().languageCode = this.getLanguage
+
+      let provider = null
+      switch (providerName) {
+        case 'google': {
+          provider = new firebase.auth.GoogleAuthProvider()
+          provider.addScope('profile')
+          provider.addScope('email')
+          break
         }
-      ).catch(
+        case 'github': {
+          provider = new firebase.auth.GithubAuthProvider()
+          provider.addScope('read:user')
+          provider.addScope('user:email')
+          break
+        }
+      }
+
+      firebase.auth().signInWithPopup(provider).catch(
         error => this.setAuthError(error)
       )
     },
     logout () {
-      firebase.auth().logout()
+      firebase.auth().signOut()
       this.setUserCredential(null)
       this.setUser(null)
     },
   },
 }
 </script>
+
+<style lang="sass" scoped>
+.navbar-link
+  color: hsl(219, 70%, 96%)
+  &:after
+    border-color: hsl(219, 70%, 96%)!important
+  &:hover
+    color: hsl(217, 71%, 53%)
+    &:after
+      border-color: hsl(217, 71%, 53%)!important
+</style>

@@ -17,6 +17,8 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex'
+
 import Header from '@/components/header'
 import Footer from '@/components/footer'
 
@@ -28,7 +30,8 @@ export default {
     Header,
     Footer,
   },
-  mounted () {
+  methods: mapActions(['setUser', 'setAuthError']),
+  created () {
     const firebaseConfig = {
       apiKey: 'AIzaSyBoOuFaBPdtbqG_Stx6_Zq5nGDFdfHe75g',
       authDomain: 'model-catalog-303814.firebaseapp.com',
@@ -38,6 +41,16 @@ export default {
       appId: '1:712573757834:web:d969e1bce947165c624073',
     }
     firebase.initializeApp(firebaseConfig)
+    firebase.auth().onAuthStateChanged(
+      user => {
+        if (user) {
+          console.log(user)
+          this.setUser(user.providerData.pop())
+          this.setAuthError(null)
+        }
+      }
+    )
+    firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL)
   },
 }
 </script>

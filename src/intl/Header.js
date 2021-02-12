@@ -1,7 +1,7 @@
 export default {
   auth_google: {
-    ru: 'Войти с аккаунтом Google',
-    en: 'Sign in with Google',
+    ru: 'Войти',
+    en: 'Sign in',
   },
   logout: {
     ru: 'Выйти',
